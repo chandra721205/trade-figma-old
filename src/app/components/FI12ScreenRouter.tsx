@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ComponentType } from "react";
 import {
   FIDashboardScreen,
   FIIApplicationsScreen,
@@ -15,7 +15,7 @@ import {
   FIScreenLauncher,
 } from "./FI12Screens";
 
-const routes: Record<string, React.ComponentType<{ onBack: () => void }>> = {
+const routes: Record<string, ComponentType<{ onBack: () => void }>> = {
   "fi-210": FIDashboardScreen,
   "fi-211": FIIApplicationsScreen,
   "fi-212": FIApplicationDetailScreen,
