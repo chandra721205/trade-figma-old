@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useId } from "react";
 import { motion } from "motion/react";
 import { Bot, Mic, TrendingUp, TrendingDown, Calendar, Sparkles, Shield } from "lucide-react";
 import { DSButton, DSCard, DSBadge, designTokens } from "../../design-system";
@@ -8,6 +8,9 @@ import { grokAI } from "./GrokAIService";
 const { colors, typography, spacing } = designTokens;
 
 export function AIInsightsCard() {
+  const uid = useId().replace(/:/g, "");
+  const demandGradId = `colorDemand_${uid}`;
+  const supplyGradId = `colorSupply_${uid}`;
   const [isListening, setIsListening] = useState(false);
   const [aiQuery, setAiQuery] = useState("");
   const [aiResponse, setAiResponse] = useState("");
@@ -112,13 +115,13 @@ export function AIInsightsCard() {
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={demandSupplyData}>
                 <defs>
-                  <linearGradient id="colorDemand" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor={colors.status.success} stopOpacity={0.3} />
-                    <stop offset="95%" stopColor={colors.status.success} stopOpacity={0} />
+                  <linearGradient key={demandGradId} id={demandGradId} x1="0" y1="0" x2="0" y2="1">
+                    <stop key={`${demandGradId}-start`} offset="5%" stopColor={colors.status.success} stopOpacity={0.3} />
+                    <stop key={`${demandGradId}-end`} offset="95%" stopColor={colors.status.success} stopOpacity={0} />
                   </linearGradient>
-                  <linearGradient id="colorSupply" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor={colors.status.info} stopOpacity={0.3} />
-                    <stop offset="95%" stopColor={colors.status.info} stopOpacity={0} />
+                  <linearGradient key={supplyGradId} id={supplyGradId} x1="0" y1="0" x2="0" y2="1">
+                    <stop key={`${supplyGradId}-start`} offset="5%" stopColor={colors.status.info} stopOpacity={0.3} />
+                    <stop key={`${supplyGradId}-end`} offset="95%" stopColor={colors.status.info} stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke={colors.border.light} />
@@ -136,7 +139,7 @@ export function AIInsightsCard() {
                   dataKey="demand"
                   stroke={colors.status.success}
                   fillOpacity={1}
-                  fill="url(#colorDemand)"
+                  fill={`url(#${demandGradId})`}
                   strokeWidth={2}
                 />
                 <Area
@@ -144,7 +147,7 @@ export function AIInsightsCard() {
                   dataKey="supply"
                   stroke={colors.status.info}
                   fillOpacity={1}
-                  fill="url(#colorSupply)"
+                  fill={`url(#${supplyGradId})`}
                   strokeWidth={2}
                 />
               </AreaChart>
